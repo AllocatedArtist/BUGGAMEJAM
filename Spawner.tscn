@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Scenes/Spawner.cs" type="Script" id=1]
+
+[node name="Spawner" type="Position2D"]
+position = Vector2( 197, 225 )
+script = ExtResource( 1 )
+MAX_ENEMY_COUNT = 10
+
+[node name="Spawn" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+
+[connection signal="timeout" from="Spawn" to="." method="SpawnTimer"]

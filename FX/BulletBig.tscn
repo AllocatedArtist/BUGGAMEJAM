@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Scenes/Bullet.cs" type="Script" id=1]
+
+[sub_resource type="SphereMesh" id=1]
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 1.0
+
+[node name="Bullet" type="Node2D"]
+modulate = Color( 0.313726, 1, 0, 1 )
+scale = Vector2( 6, 6 )
+script = ExtResource( 1 )
+speed = 200
+
+[node name="muzzle" type="MeshInstance2D" parent="."]
+modulate = Color( 1, 0.960784, 0, 1 )
+mesh = SubResource( 1 )
+
+[node name="area" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="Collider" type="CollisionShape2D" parent="area"]
+shape = SubResource( 2 )
+
+[node name="Life" type="Timer" parent="."]
+wait_time = 3.0
+autostart = true
+
+[connection signal="body_entered" from="area" to="." method="enemyDetected"]
+[connection signal="timeout" from="Life" to="." method="timeout"]

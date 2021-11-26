@@ -1,0 +1,168 @@
+[gd_scene load_steps=23 format=2]
+
+[ext_resource path="res://Player/Scripts/Player.cs" type="Script" id=1]
+[ext_resource path="res://Player/player.png" type="Texture" id=2]
+[ext_resource path="res://Player/reload/player_reloadanim.png" type="Texture" id=3]
+[ext_resource path="res://Player/hit2.mp3" type="AudioStream" id=4]
+[ext_resource path="res://Player/Laser_Shoot43.wav" type="AudioStream" id=5]
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 802, 602 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 3 )
+region = Rect2( 802, 0, 802, 602 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 3 )
+region = Rect2( 1604, 0, 802, 602 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 3 )
+region = Rect2( 2406, 0, 802, 602 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 3 )
+region = Rect2( 3208, 0, 802, 602 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 3 )
+region = Rect2( 4010, 0, 802, 602 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 3 )
+region = Rect2( 4812, 0, 802, 602 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 3 )
+region = Rect2( 5614, 0, 802, 602 )
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 3 )
+region = Rect2( 6416, 0, 802, 602 )
+
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 3 )
+region = Rect2( 7218, 0, 802, 602 )
+
+[sub_resource type="AtlasTexture" id=18]
+atlas = ExtResource( 3 )
+region = Rect2( 8020, 0, 802, 602 )
+
+[sub_resource type="AtlasTexture" id=19]
+atlas = ExtResource( 3 )
+region = Rect2( 8822, 0, 802, 602 )
+
+[sub_resource type="SpriteFrames" id=6]
+animations = [ {
+"frames": [ SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ) ],
+"loop": true,
+"name": "reload",
+"speed": 8.0
+}, {
+"frames": [ ExtResource( 2 ) ],
+"loop": true,
+"name": "idle",
+"speed": 5.0
+} ]
+
+[sub_resource type="Animation" id=20]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("..:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=21]
+resource_name = "hit"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/path = NodePath("..:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 0, 0, 1 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="CircleShape2D" id=7]
+radius = 14.0
+
+[sub_resource type="QuadMesh" id=5]
+
+[node name="Player" type="KinematicBody2D" groups=["Player"]]
+collision_mask = 3
+script = ExtResource( 1 )
+FIRERATE = 0.15
+Velocity = 300
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( -3, -14 )
+rotation = 1.5708
+scale = Vector2( 0.1, 0.1 )
+frames = SubResource( 6 )
+animation = "idle"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../AnimatedSprite")
+anims/RESET = SubResource( 20 )
+anims/hit = SubResource( 21 )
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2( 4, -11 )
+shape = SubResource( 7 )
+
+[node name="Weapon" type="Node2D" parent="."]
+position = Vector2( 9, 0 )
+
+[node name="muzzle" type="MeshInstance2D" parent="Weapon"]
+visible = false
+modulate = Color( 1, 0, 0, 1 )
+position = Vector2( 5, -2 )
+scale = Vector2( 20, 2 )
+mesh = SubResource( 5 )
+
+[node name="bulletSpawn" type="Position2D" parent="Weapon/muzzle"]
+position = Vector2( 0.65, 1 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+zoom = Vector2( 0.6, 0.6 )
+smoothing_enabled = true
+
+[node name="restartTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="reloadTimer" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true
+
+[node name="BODY" type="Node2D" parent="."]
+position = Vector2( 0, -10 )
+
+[node name="hurt" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+
+[node name="gun" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 5 )
+
+[node name="score" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="restartTimer" to="." method="restart"]
+[connection signal="timeout" from="reloadTimer" to="." method="onReloadTimeout"]
+[connection signal="timeout" from="score" to="." method="Score"]
